@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Taartlab — Links</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ivory:#FBF2E2;
+    --paper:#F6EAD4;
+    --wine:#7A2333;
+    --wine-dark:#5C1A26;
+    --espresso:#2B1B14;
+    --gold:#D9A544;
+    --line: rgba(43,27,20,0.14);
+    --shadow: 0 18px 40px -18px rgba(43,27,20,0.35);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--ivory);
+    color:var(--espresso);
+    font-family:'Inter', sans-serif;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:48px 20px;
+  }
+  .card{
+    width:100%;
+    max-width:420px;
+    text-align:center;
+  }
+  .avatar{
+    width:92px; height:92px;
+    border-radius:50%;
+    overflow:hidden;
+    margin:0 auto 20px;
+    border:3px solid var(--paper);
+    box-shadow:var(--shadow);
+  }
+  .avatar img{width:100%; height:100%; object-fit:cover; display:block;}
+  .logo{
+    font-family:'Fraunces', serif;
+    font-weight:900;
+    font-size:1.7rem;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    margin-bottom:8px;
+  }
+  .logo .dot{width:9px; height:9px; border-radius:50%; background:var(--wine); display:inline-block;}
+  .tagline{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+    color:var(--wine);
+    margin-bottom:38px;
+  }
+  .links{display:flex; flex-direction:column; gap:14px;}
+  .link-btn{
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:100px;
+    padding:18px 24px;
+    font-weight:600;
+    font-size:1rem;
+    color:var(--espresso);
+    text-decoration:none;
+    transition:transform .2s, box-shadow .2s, background .2s;
+  }
+  .link-btn:hover{transform:translateY(-2px); box-shadow:var(--shadow); background:#F0E0BE;}
+  .link-btn.primary{
+    background:var(--espresso);
+    color:var(--ivory);
+    border-color:var(--espresso);
+  }
+  .link-btn.primary:hover{background:var(--wine);}
+  footer{
+    margin-top:44px;
+    font-size:0.78rem;
+    opacity:0.55;
+  }
+  footer a{color:inherit;}
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="avatar"><img src="assets/rik-founder.jpg" alt="Rik, oprichter van Taartlab" loading="lazy"></div>
+    <div class="logo"><span class="dot"></span>Taartlab</div>
+    <div class="tagline">Appeltaart-fan &middot; getest op duizenden fietskilometers</div>
+
+    <div class="links">
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSc5mA4WH-B5yENiv4yIeNetFoNpuGGH67VNXDCgAMoqQqELOw/viewform" target="_blank" rel="noopener" class="link-btn primary">🍰 Bestel nu — eerste batch</a>
+      <a href="https://www.taartlab.nl" class="link-btn">🌐 Naar de website</a>
+      <a href="https://instagram.com/taartlab.nl" target="_blank" rel="noopener" class="link-btn">📸 Volg ons op Instagram</a>
+      <a href="mailto:info@taartlab.nl" class="link-btn">✉️ Stuur een mail</a>
+    </div>
+
+    <footer>&copy; 2026 Taartlab &mdash; een project van <a href="#">De Loor Studio</a></footer>
+  </div>
+</body>
+</html>
