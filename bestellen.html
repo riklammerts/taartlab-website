@@ -105,6 +105,40 @@
     text-decoration:none;
   }
   small.disclaimer{display:block; margin-top:14px; opacity:0.5; font-size:0.78rem; text-align:center;}
+
+  .countdown-banner{
+    background:var(--espresso);
+    color:var(--ivory);
+    border-radius:16px;
+    padding:20px 24px;
+    margin-bottom:32px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:16px;
+  }
+  .countdown-banner .txt{font-size:0.9rem; opacity:0.85;}
+  .countdown-banner .txt strong{color:var(--gold);}
+  .countdown{display:flex; gap:8px;}
+  .countdown .unit{
+    background:rgba(251,242,226,0.1);
+    border:1px solid rgba(251,242,226,0.22);
+    border-radius:8px;
+    padding:6px 10px;
+    text-align:center;
+    min-width:44px;
+  }
+  .countdown .unit .val{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:1rem; font-weight:600; color:var(--ivory);
+    display:block; line-height:1;
+  }
+  .countdown .unit .lbl{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.56rem; text-transform:uppercase; letter-spacing:0.04em;
+    color:var(--gold); display:block; margin-top:3px;
+  }
 </style>
 </head>
 <body>
@@ -118,13 +152,23 @@
 <main class="wrap">
   <div id="form-view">
     <h1>Bestel je Taartlab</h1>
-    <p class="sub">Vers besteld, rustig ontdooid, binnen 24 uur op tafel.</p>
+    <p class="sub">Vers besteld, rustig ontdooid, elke zaterdag op tafel.</p>
+
+    <div class="countdown-banner">
+      <div class="txt">Bestel v&oacute;&oacute;r <strong>donderdag 23:59</strong> &mdash; ophalen/bezorgen die zaterdag.</div>
+      <div class="countdown" id="countdown-order">
+        <div class="unit"><span class="val" id="cd-days-order">–</span><span class="lbl">dagen</span></div>
+        <div class="unit"><span class="val" id="cd-hours-order">–</span><span class="lbl">uur</span></div>
+        <div class="unit"><span class="val" id="cd-mins-order">–</span><span class="lbl">min</span></div>
+      </div>
+    </div>
 
     <form id="order-form" action="https://formspree.io/f/xppznqyk" method="POST">
       <input type="hidden" name="_subject" value="Nieuwe Taartlab bestelling">
 
       <fieldset>
         <legend>Wat wil je bestellen?</legend>
+        <div class="hint">Introductieprijzen &mdash; geldig voor deze eerste batch, gaan omhoog bij de volgende ronde.</div>
         <div class="options" id="product-options">
           <label class="option">
             <input type="radio" name="product" value="1 stuk — €4,25" required>
@@ -168,13 +212,12 @@
       </div>
 
       <fieldset>
-        <legend>Welk moment heeft je voorkeur?</legend>
+        <legend>Welk tijdslot op zaterdag heeft je voorkeur?</legend>
         <div class="hint">We bevestigen de exacte datum zodra de eerste batch binnen is.</div>
         <div class="options">
-          <label class="option"><input type="radio" name="moment" value="Ochtend" required><span class="opt-label">Ochtend</span></label>
-          <label class="option"><input type="radio" name="moment" value="Middag" required><span class="opt-label">Middag</span></label>
-          <label class="option"><input type="radio" name="moment" value="Avond" required><span class="opt-label">Avond</span></label>
-          <label class="option"><input type="radio" name="moment" value="Weekend" required><span class="opt-label">Weekend</span></label>
+          <label class="option"><input type="radio" name="moment" value="Ochtend (10:00–12:00)" required><span class="opt-label">Ochtend (10:00–12:00)</span></label>
+          <label class="option"><input type="radio" name="moment" value="Middag (13:00–15:00)" required><span class="opt-label">Middag (13:00–15:00)</span></label>
+          <label class="option"><input type="radio" name="moment" value="Avond (17:00–19:00)" required><span class="opt-label">Avond (17:00–19:00)</span></label>
         </div>
       </fieldset>
 
@@ -253,6 +296,35 @@
       window.scrollTo(0,0);
     });
   });
+
+  // Countdown to next Thursday 23:59 (weekly order deadline)
+  (function(){
+    function nextThursday2359(){
+      var now = new Date();
+      var day = now.getDay();
+      var daysUntil = (4 - day + 7) % 7;
+      var target = new Date(now);
+      target.setDate(now.getDate() + daysUntil);
+      target.setHours(23,59,59,0);
+      if (target <= now) { target.setDate(target.getDate() + 7); }
+      return target;
+    }
+    function tick(){
+      var target = nextThursday2359();
+      var diff = Math.max(0, target - new Date());
+      var days = Math.floor(diff / 86400000);
+      var hours = Math.floor((diff % 86400000) / 3600000);
+      var mins = Math.floor((diff % 3600000) / 60000);
+      var d = document.getElementById('cd-days-order');
+      var h = document.getElementById('cd-hours-order');
+      var m = document.getElementById('cd-mins-order');
+      if (d) d.textContent = days;
+      if (h) h.textContent = hours;
+      if (m) m.textContent = mins;
+    }
+    tick();
+    setInterval(tick, 30000);
+  })();
 
   // Preselect a product if the link included ?product=stuk|halve|hele
   var params = new URLSearchParams(window.location.search);
