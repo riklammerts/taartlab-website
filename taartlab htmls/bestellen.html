@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bestel — Taartlab</title>
+<meta name="description" content="Bestel je Taartlab appeltaart — los stuk, halve of hele taart.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ivory:#FBF2E2;
+    --paper:#F6EAD4;
+    --wine:#7A2333;
+    --wine-dark:#5C1A26;
+    --espresso:#2B1B14;
+    --gold:#D9A544;
+    --line: rgba(43,27,20,0.14);
+    --shadow: 0 18px 40px -18px rgba(43,27,20,0.35);
+    --radius: 22px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--ivory);
+    color:var(--espresso);
+    font-family:'Inter', sans-serif;
+    line-height:1.6;
+    min-height:100vh;
+  }
+  h1,h2{font-family:'Fraunces', serif; font-weight:700; line-height:1.1;}
+  a{color:inherit;}
+  .wrap{max-width:640px; margin:0 auto; padding:0 24px;}
+  header{padding:24px 0; border-bottom:1px solid var(--line);}
+  .logo{font-family:'Fraunces', serif; font-weight:900; font-size:1.3rem; display:flex; align-items:center; gap:8px;}
+  .logo .dot{width:8px; height:8px; border-radius:50%; background:var(--wine); display:inline-block;}
+  main{padding:48px 0 80px;}
+  h1{font-size:clamp(1.8rem, 4vw, 2.4rem); margin-bottom:10px;}
+  .sub{opacity:0.75; margin-bottom:36px;}
+
+  fieldset{border:none; margin-bottom:28px;}
+  legend{
+    font-weight:600; font-size:0.98rem; margin-bottom:12px;
+    display:block; width:100%;
+  }
+  .hint{font-size:0.84rem; opacity:0.6; margin-top:-8px; margin-bottom:12px;}
+  label.field-label{display:block; font-weight:600; font-size:0.95rem; margin-bottom:8px;}
+  input[type="text"], input[type="tel"], input[type="email"], input[type="number"]{
+    width:100%;
+    padding:14px 16px;
+    border:1.5px solid var(--line);
+    border-radius:12px;
+    font-family:'Inter', sans-serif;
+    font-size:1rem;
+    background:#fff;
+    color:var(--espresso);
+    margin-bottom:20px;
+  }
+  input:focus{outline:none; border-color:var(--wine);}
+
+  .options{display:flex; flex-direction:column; gap:10px;}
+  .option{
+    display:flex; align-items:center; gap:12px;
+    border:1.5px solid var(--line);
+    border-radius:14px;
+    padding:14px 16px;
+    cursor:pointer;
+    transition:border-color .2s, background .2s;
+  }
+  .option:hover{border-color:var(--wine);}
+  .option input{margin:0; accent-color:var(--wine); width:18px; height:18px; flex-shrink:0;}
+  .option.selected{border-color:var(--wine); background:rgba(122,35,51,0.05);}
+  .option .opt-label{font-weight:600; font-size:0.95rem;}
+  .option .opt-price{margin-left:auto; font-family:'IBM Plex Mono', monospace; font-size:0.9rem; color:var(--wine);}
+
+  #bezorgadres-wrap{display:none;}
+
+  button[type="submit"]{
+    width:100%;
+    background:var(--espresso);
+    color:var(--ivory);
+    border:none;
+    padding:18px;
+    border-radius:100px;
+    font-weight:600;
+    font-size:1.02rem;
+    cursor:pointer;
+    transition:background .2s;
+  }
+  button[type="submit"]:hover{background:var(--wine);}
+
+  #thanks{
+    display:none;
+    text-align:center;
+    padding:60px 0;
+  }
+  #thanks h2{font-size:1.8rem; margin-bottom:14px;}
+  #thanks p{opacity:0.78; max-width:420px; margin:0 auto 28px;}
+  #thanks a{
+    display:inline-block;
+    border:1.5px solid var(--line);
+    padding:13px 24px;
+    border-radius:100px;
+    font-weight:600;
+    text-decoration:none;
+  }
+  small.disclaimer{display:block; margin-top:14px; opacity:0.5; font-size:0.78rem; text-align:center;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a href="index.html" class="logo"><span class="dot"></span>Taartlab</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <div id="form-view">
+    <h1>Bestel je Taartlab</h1>
+    <p class="sub">Vers besteld, rustig ontdooid, binnen 24 uur op tafel.</p>
+
+    <form id="order-form">
+
+      <fieldset>
+        <legend>Wat wil je bestellen?</legend>
+        <div class="options" id="product-options">
+          <label class="option">
+            <input type="radio" name="product" value="1 stuk — €4,25" required>
+            <span class="opt-label">Los stuk (185 gram)</span>
+            <span class="opt-price">€4,25</span>
+          </label>
+          <label class="option">
+            <input type="radio" name="product" value="Halve taart (5 stuks) — €19,50" required>
+            <span class="opt-label">Halve taart (5 stuks)</span>
+            <span class="opt-price">€19,50</span>
+          </label>
+          <label class="option">
+            <input type="radio" name="product" value="Hele taart (10 stuks) — €36,50" required>
+            <span class="opt-label">Hele taart (10 stuks)</span>
+            <span class="opt-price">€36,50</span>
+          </label>
+        </div>
+      </fieldset>
+
+      <label class="field-label" for="aantal">Aantal</label>
+      <input type="number" id="aantal" name="aantal" min="1" value="1" required>
+
+      <fieldset>
+        <legend>Ophalen of bezorgen?</legend>
+        <div class="hint">Verder dan 5 km van Eindhoven-centrum? Dan kunnen we nog niet bezorgen — kies Afhalen.</div>
+        <div class="options" id="delivery-options">
+          <label class="option">
+            <input type="radio" name="delivery" value="Afhalen bij Le Sorelline in Eindhoven (Vrijstraat 48)" required>
+            <span class="opt-label">Afhalen — Vrijstraat 48, Eindhoven</span>
+          </label>
+          <label class="option">
+            <input type="radio" name="delivery" value="Bezorgen (+€3,50, binnen 5 km van Eindhoven-centrum)" required>
+            <span class="opt-label">Bezorgen (+€3,50)</span>
+          </label>
+        </div>
+      </fieldset>
+
+      <div id="bezorgadres-wrap">
+        <label class="field-label" for="bezorgadres">Bezorgadres</label>
+        <input type="text" id="bezorgadres" name="bezorgadres" placeholder="Straat, huisnummer, postcode, plaats">
+      </div>
+
+      <fieldset>
+        <legend>Welk moment heeft je voorkeur?</legend>
+        <div class="hint">We bevestigen de exacte datum zodra de eerste batch binnen is.</div>
+        <div class="options">
+          <label class="option"><input type="radio" name="moment" value="Ochtend" required><span class="opt-label">Ochtend</span></label>
+          <label class="option"><input type="radio" name="moment" value="Middag" required><span class="opt-label">Middag</span></label>
+          <label class="option"><input type="radio" name="moment" value="Avond" required><span class="opt-label">Avond</span></label>
+          <label class="option"><input type="radio" name="moment" value="Weekend" required><span class="opt-label">Weekend</span></label>
+        </div>
+      </fieldset>
+
+      <label class="field-label" for="naam">Naam</label>
+      <input type="text" id="naam" name="naam" required>
+
+      <label class="field-label" for="telefoon">Telefoonnummer</label>
+      <input type="tel" id="telefoon" name="telefoon" placeholder="Voor Tikkie en afstemming" required>
+
+      <label class="field-label" for="email">E-mailadres</label>
+      <input type="email" id="email" name="email" placeholder="Voor bevestiging" required>
+
+      <label class="field-label" for="allergieen">Allergieën of dieetwensen? (optioneel)</label>
+      <input type="text" id="allergieen" name="allergieen">
+
+      <button type="submit">Bestel nu</button>
+      <small class="disclaimer">Je gegevens gebruiken we uitsluitend om je bestelling te bezorgen.</small>
+    </form>
+  </div>
+
+  <div id="thanks">
+    <h2>Bedankt voor je bestelling! 🎉</h2>
+    <p>Je ontvangt binnen enkele uren een Tikkie-link ter bevestiging op het opgegeven telefoonnummer.</p>
+    <a href="index.html">Terug naar de website</a>
+  </div>
+</main>
+
+<!-- Hidden iframe target so the Google Form submission doesn't navigate the page away -->
+<iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
+
+<!-- Hidden form that actually posts to Google Forms' submission endpoint -->
+<form id="gform"
+      action="https://docs.google.com/forms/d/e/1FAIpQLSc5mA4WH-B5yENiv4yIeNetFoNpuGGH67VNXDCgAMoqQqELOw/formResponse"
+      method="POST" target="hidden_iframe" style="display:none;">
+  <input type="text" name="entry.2042623043" id="g-naam">
+  <input type="text" name="entry.832855507" id="g-telefoon">
+  <input type="text" name="entry.230813353" id="g-email">
+  <input type="text" name="entry.1995668647" id="g-product">
+  <input type="text" name="entry.145463100" id="g-aantal">
+  <input type="text" name="entry.1602684709" id="g-delivery">
+  <input type="text" name="entry.1509459677" id="g-bezorgadres">
+  <input type="text" name="entry.818273299" id="g-moment">
+  <input type="text" name="entry.1882098300" id="g-allergieen">
+</form>
+
+<script>
+  // Toggle visual "selected" state on the custom radio cards
+  document.querySelectorAll('.option input[type="radio"]').forEach(function(input){
+    input.addEventListener('change', function(){
+      var group = document.getElementsByName(input.name);
+      group.forEach(function(i){ i.closest('.option').classList.remove('selected'); });
+      input.closest('.option').classList.add('selected');
+
+      if (input.name === 'delivery') {
+        var addrWrap = document.getElementById('bezorgadres-wrap');
+        var addrInput = document.getElementById('bezorgadres');
+        var isBezorgen = input.value.indexOf('Bezorgen') === 0;
+        addrWrap.style.display = isBezorgen ? 'block' : 'none';
+        addrInput.required = isBezorgen;
+      }
+    });
+  });
+
+  document.getElementById('order-form').addEventListener('submit', function(e){
+    e.preventDefault();
+
+    document.getElementById('g-naam').value = document.getElementById('naam').value;
+    document.getElementById('g-telefoon').value = document.getElementById('telefoon').value;
+    document.getElementById('g-email').value = document.getElementById('email').value;
+    document.getElementById('g-product').value = (document.querySelector('input[name="product"]:checked') || {}).value || '';
+    document.getElementById('g-aantal').value = document.getElementById('aantal').value;
+    document.getElementById('g-delivery').value = (document.querySelector('input[name="delivery"]:checked') || {}).value || '';
+    document.getElementById('g-bezorgadres').value = document.getElementById('bezorgadres').value;
+    document.getElementById('g-moment').value = (document.querySelector('input[name="moment"]:checked') || {}).value || '';
+    document.getElementById('g-allergieen').value = document.getElementById('allergieen').value;
+
+    document.getElementById('gform').submit();
+
+    document.getElementById('form-view').style.display = 'none';
+    document.getElementById('thanks').style.display = 'block';
+    window.scrollTo(0,0);
+  });
+
+  // Preselect a product if the link included ?product=stuk|halve|hele
+  var params = new URLSearchParams(window.location.search);
+  var pre = params.get('product');
+  var map = { stuk: 0, halve: 1, hele: 2 };
+  if (pre && map.hasOwnProperty(pre)) {
+    var radios = document.querySelectorAll('input[name="product"]');
+    radios[map[pre]].checked = true;
+    radios[map[pre]].dispatchEvent(new Event('change'));
+  }
+</script>
+
+</body>
+</html>
