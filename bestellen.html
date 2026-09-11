@@ -120,7 +120,8 @@
     <h1>Bestel je Taartlab</h1>
     <p class="sub">Vers besteld, rustig ontdooid, binnen 24 uur op tafel.</p>
 
-    <form id="order-form">
+    <form id="order-form" action="https://formspree.io/f/xppznqyk" method="POST">
+      <input type="hidden" name="_subject" value="Nieuwe Taartlab bestelling">
 
       <fieldset>
         <legend>Wat wil je bestellen?</legend>
@@ -199,25 +200,12 @@
     <p>Je ontvangt binnen enkele uren een Tikkie-link ter bevestiging op het opgegeven telefoonnummer.</p>
     <a href="index.html">Terug naar de website</a>
   </div>
+
+  <div id="error-msg" style="display:none; text-align:center; padding:40px 0;">
+    <h2 style="font-size:1.5rem; margin-bottom:14px;">Er ging iets mis 😕</h2>
+    <p style="opacity:0.78; max-width:420px; margin:0 auto 24px;">Je bestelling kon niet worden verstuurd. Probeer het nog eens, of mail rechtstreeks naar <a href="mailto:bestellingen@taartlab.nl" style="text-decoration:underline;">bestellingen@taartlab.nl</a>.</p>
+  </div>
 </main>
-
-<!-- Hidden iframe target so the Google Form submission doesn't navigate the page away -->
-<iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
-
-<!-- Hidden form that actually posts to Google Forms' submission endpoint -->
-<form id="gform"
-      action="https://docs.google.com/forms/d/e/1FAIpQLSc5mA4WH-B5yENiv4yIeNetFoNpuGGH67VNXDCgAMoqQqELOw/formResponse"
-      method="POST" target="hidden_iframe" style="display:none;">
-  <input type="text" name="entry.2042623043" id="g-naam">
-  <input type="text" name="entry.832855507" id="g-telefoon">
-  <input type="text" name="entry.230813353" id="g-email">
-  <input type="text" name="entry.1995668647" id="g-product">
-  <input type="text" name="entry.145463100" id="g-aantal">
-  <input type="text" name="entry.1602684709" id="g-delivery">
-  <input type="text" name="entry.1509459677" id="g-bezorgadres">
-  <input type="text" name="entry.818273299" id="g-moment">
-  <input type="text" name="entry.1882098300" id="g-allergieen">
-</form>
 
 <script>
   // Toggle visual "selected" state on the custom radio cards
@@ -237,24 +225,33 @@
     });
   });
 
-  document.getElementById('order-form').addEventListener('submit', function(e){
+  var form = document.getElementById('order-form');
+  var submitBtn = form.querySelector('button[type="submit"]');
+
+  form.addEventListener('submit', function(e){
     e.preventDefault();
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Bezig met versturen…';
 
-    document.getElementById('g-naam').value = document.getElementById('naam').value;
-    document.getElementById('g-telefoon').value = document.getElementById('telefoon').value;
-    document.getElementById('g-email').value = document.getElementById('email').value;
-    document.getElementById('g-product').value = (document.querySelector('input[name="product"]:checked') || {}).value || '';
-    document.getElementById('g-aantal').value = document.getElementById('aantal').value;
-    document.getElementById('g-delivery').value = (document.querySelector('input[name="delivery"]:checked') || {}).value || '';
-    document.getElementById('g-bezorgadres').value = document.getElementById('bezorgadres').value;
-    document.getElementById('g-moment').value = (document.querySelector('input[name="moment"]:checked') || {}).value || '';
-    document.getElementById('g-allergieen').value = document.getElementById('allergieen').value;
-
-    document.getElementById('gform').submit();
-
-    document.getElementById('form-view').style.display = 'none';
-    document.getElementById('thanks').style.display = 'block';
-    window.scrollTo(0,0);
+    fetch(form.action, {
+      method: 'POST',
+      body: new FormData(form),
+      headers: { 'Accept': 'application/json' }
+    }).then(function(response){
+      if (response.ok) {
+        document.getElementById('form-view').style.display = 'none';
+        document.getElementById('thanks').style.display = 'block';
+        window.scrollTo(0,0);
+      } else {
+        document.getElementById('form-view').style.display = 'none';
+        document.getElementById('error-msg').style.display = 'block';
+        window.scrollTo(0,0);
+      }
+    }).catch(function(){
+      document.getElementById('form-view').style.display = 'none';
+      document.getElementById('error-msg').style.display = 'block';
+      window.scrollTo(0,0);
+    });
   });
 
   // Preselect a product if the link included ?product=stuk|halve|hele
